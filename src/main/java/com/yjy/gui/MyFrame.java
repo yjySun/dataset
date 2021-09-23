@@ -4,32 +4,42 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MyFrame extends JFrame {
 
-    JButton button = new JButton("按钮");
-    JLabel lable = new JLabel("hello world!");
+    JPanel choosePanel= new JPanel();
+    JPanel checkBoxPanel= new JPanel();
+    JPanel contentPanel= new JPanel();
+
     public MyFrame(String title) {
         super(title);
 
         Container container = getContentPane();
-        container.setLayout(new FlowLayout());
+        container.setLayout(new BorderLayout());
 
-        container.add(button);
-        container.add(lable);
+        choosePanel.setBorder(BorderFactory.createTitledBorder("请选取你的源文件"));
+        choosePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20,10));
 
-        DateListener dateListener = new DateListener();
-        button.addActionListener(dateListener);
+        JLabel jLabel = new JLabel("源文件");
+        JTextField jTextField = new JTextField();
+        jTextField.setPreferredSize(new Dimension(350,30));
+        JButton jButton = new JButton("浏览");
+        jButton.setPreferredSize(new Dimension(100,30));
+
+        choosePanel.add(jLabel);
+        choosePanel.add(jTextField);
+        choosePanel.add(jButton);
+
+
+        container.add(choosePanel, BorderLayout.NORTH);
+        container.add(checkBoxPanel, BorderLayout.CENTER);
+        container.add(contentPanel, BorderLayout.SOUTH);
     }
 
     public class DateListener implements ActionListener{
 
         public void actionPerformed(ActionEvent e) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:MM:ss");
-            String format = simpleDateFormat.format(new Date());
-            lable.setText(format);
+
         }
     }
 }
