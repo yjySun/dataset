@@ -16,7 +16,7 @@ import java.io.FileWriter;
  * @Date: 2021/9/17 9:47
  * @Description: 生成 abc-dataset-cdc-subscriber 所需要的Java文件
  */
-public class Subscriber {
+public class SubscriberJavaFile {
     public static void main(String[] args) throws Exception {
         String excelPath = "C:/Users/shinow/Desktop/dataset2.xlsx";
         File excel = new File(excelPath);

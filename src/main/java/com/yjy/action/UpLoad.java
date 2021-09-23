@@ -2,6 +2,7 @@ package com.yjy.action;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.util.HashSet;
 
@@ -11,16 +12,18 @@ import java.util.HashSet;
  * @Description:
  */
 public class UpLoad {
-    /**
-     * 文件上传功能
-     *
-     * @param developer
-     */
+    public static String path = "./";
+
     public static String eventOnImport(JButton developer) {
         String filePath = null;
         JFileChooser chooser = new JFileChooser();
+        //设置只能单选文件
         chooser.setMultiSelectionEnabled(false);
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        //设置默认目录为桌面
+        File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
+        chooser.setCurrentDirectory(desktopDir);
 
         /** 过滤文件类型 * */
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Microsoft Excel文件(*.xlsx)", "xlsx");
@@ -32,9 +35,15 @@ public class UpLoad {
             /** 得到选择的文件* */
             File arrfiles = chooser.getSelectedFile();
             filePath = arrfiles.getPath();
+            String[] split = filePath.split("\\.");
+            if (!"xls".equals(split[1]) && !"xlsx".equals(split[1])) {
+                JOptionPane.showMessageDialog(null, "上传失败！请检查文件格式！", "提示",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return null;
+            }
+
             FileInputStream input = null;
             FileOutputStream out = null;
-            String path = "./";
             try {
                 File dir = new File(path);
                 /** 目标文件夹 * */
@@ -52,6 +61,7 @@ public class UpLoad {
                 input = new FileInputStream(arrfiles);
                 byte[] buffer = new byte[1024];
                 File des = new File(path, arrfiles.getName());
+
                 out = new FileOutputStream(des);
                 int len = 0;
                 while (-1 != (len = input.read(buffer))) {
@@ -59,9 +69,6 @@ public class UpLoad {
                 }
                 out.close();
                 input.close();
-                JOptionPane.showMessageDialog(null, "上传成功！", "提示",
-                        JOptionPane.INFORMATION_MESSAGE);
-
             } catch (FileNotFoundException e1) {
                 JOptionPane.showMessageDialog(null, "上传失败！", "提示",
                         JOptionPane.ERROR_MESSAGE);

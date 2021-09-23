@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -16,11 +17,14 @@ import java.io.FileWriter;
  * @Date: 2021/9/17 10:17
  * @Description: 生成 abc-dataset-cdc-kettle 项目所需的java文件
  */
-public class Kettle {
+public class KettleJavaFile {
 
-    public static void main(String[] args) throws Exception {
-        String excelPath = "C:/Users/shinow/Desktop/dataset2.xlsx";
-        File excel = new File(excelPath);
+    public static void generateKettleJavaFile(String filePath) throws Exception {
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        File com = fsv.getHomeDirectory();
+        String deskTopPath = com.getPath() + "\\kettleJavaFile\\";//获取桌面路径
+
+        File excel = new File(filePath);
         String[] split = excel.getName().split("\\.");  //.是特殊字符，需要转义！！！！！
         Workbook wb;
         //根据文件后缀（xls/xlsx）进行判断
@@ -66,15 +70,20 @@ public class Kettle {
                 String datasetFullContent = setDataSetFullFile(javaFileName, name);
                 String datasetIncrContent = setDataSetIncrFile(javaFileName, name);
 
-                FileWriter datasetFileWriter = new FileWriter("C:/Users/shinow/Desktop/bea/" + javaFileName + ".java");
+                File file = new File(deskTopPath);
+                if (!file.exists()) {
+                    file.mkdir();
+                }
+
+                FileWriter datasetFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
                 datasetFileWriter.write(datasetContent);
                 datasetFileWriter.close();
 
-                FileWriter datasetFullFileWriter = new FileWriter("C:/Users/shinow/Desktop/bea/" + javaFileName + "FullTask.java");
+                FileWriter datasetFullFileWriter = new FileWriter(deskTopPath + javaFileName + "FullTask.java");
                 datasetFullFileWriter.write(datasetFullContent);
                 datasetFullFileWriter.close();
 
-                FileWriter datasetIncrFileWriter = new FileWriter("C:/Users/shinow/Desktop/bea/" + javaFileName + "IncrTask.java");
+                FileWriter datasetIncrFileWriter = new FileWriter(deskTopPath + javaFileName + "IncrTask.java");
                 datasetIncrFileWriter.write(datasetIncrContent);
                 datasetIncrFileWriter.close();
 
