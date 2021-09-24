@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -17,9 +18,13 @@ import java.io.FileWriter;
  * @Description: 生成 abc-dataset-cdc-subscriber 所需要的Java文件
  */
 public class SubscriberJavaFile {
-    public static void main(String[] args) throws Exception {
-        String excelPath = "C:/Users/shinow/Desktop/dataset2.xlsx";
-        File excel = new File(excelPath);
+
+    public static void generateSubscriberJavaFile(String filePath, String version) throws Exception {
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        File com = fsv.getHomeDirectory();
+        String deskTopPath = com.getPath() + "\\subscriberJavaFile\\";//获取桌面路径
+
+        File excel = new File(filePath);
         String[] split = excel.getName().split("\\.");  //.是特殊字符，需要转义！！！！！
         Workbook wb;
         //根据文件后缀（xls/xlsx）进行判断
@@ -59,10 +64,16 @@ public class SubscriberJavaFile {
                         }
                     }
                 }
-                String javaFileName = setJavaFileName(datasetId);
-                String datasetContent = setDataSetSubscriberFile(javaFileName, datasetId, name, tableName);
 
-                FileWriter datasetSubscriberFileWriter = new FileWriter("C:/Users/shinow/Desktop/subscriber/" + javaFileName + ".java");
+                File file = new File(deskTopPath);
+                if (!file.exists()) {
+                    file.mkdir();
+                }
+
+                String javaFileName = setJavaFileName(datasetId);
+                String datasetContent = setDataSetSubscriberFile(javaFileName, datasetId, name, tableName, version);
+
+                FileWriter datasetSubscriberFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
                 datasetSubscriberFileWriter.write(datasetContent);
                 datasetSubscriberFileWriter.close();
             }
@@ -87,7 +98,7 @@ public class SubscriberJavaFile {
         return javaFileName.toString();
     }
 
-    public static String setDataSetSubscriberFile(String javaFileName, String datasetId, String name, String tableName) {
+    public static String setDataSetSubscriberFile(String javaFileName, String datasetId, String name, String tableName, String version) {
         String str = "package com.shinow.abc.subscriber.dnm;\n" +
                 "\n" +
                 "import com.shinow.abc.amili.subscribe.AbstractSubscriber;\n" +
@@ -103,7 +114,7 @@ public class SubscriberJavaFile {
                 "    }\n" +
                 "\n" +
                 "    public String getVersion() {\n" +
-                "        return \"1.0\";\n" +
+                "        return \""+ version +"\";\n" +
                 "    }\n" +
                 "\n" +
                 "    public String getDescription() {\n" +

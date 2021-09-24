@@ -19,7 +19,7 @@ import java.io.FileWriter;
  */
 public class KettleJavaFile {
 
-    public static void generateKettleJavaFile(String filePath) throws Exception {
+    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex) throws Exception {
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\kettleJavaFile\\";//获取桌面路径
@@ -41,13 +41,12 @@ public class KettleJavaFile {
         //开始解析
         Sheet sheet = wb.getSheetAt(0);     //读取sheet 0
 
-        int firstRowIndex = sheet.getFirstRowNum();   //第一行是列名，所以不读
+        int firstRowIndex = sheet.getFirstRowNum();
         int lastRowIndex = sheet.getLastRowNum();
 
         String name = null;
         String tableName = null;
         String datasetId = null;
-        double sortNumber = 150.0;
         for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
             Row row = sheet.getRow(rIndex);
             if (row != null) {
@@ -65,7 +64,7 @@ public class KettleJavaFile {
                         }
                     }
                 }
-                String javaFileName = setJavaFileName(datasetId);
+                String javaFileName = setJavaFileName(datasetId, startIndex);
                 String datasetContent = setDataSetFile(javaFileName, datasetId, name, tableName, sortNumber);
                 String datasetFullContent = setDataSetFullFile(javaFileName, name);
                 String datasetIncrContent = setDataSetIncrFile(javaFileName, name);
@@ -92,8 +91,7 @@ public class KettleJavaFile {
         }
     }
 
-    public static String setJavaFileName(String datasetId) {
-        int startIndex = 4;
+    public static String setJavaFileName(String datasetId, int startIndex) {
         String[] datasetIdSplit = datasetId.split("");
         StringBuffer javaFileName = new StringBuffer();
         for (int i = startIndex; i < datasetIdSplit.length; i++) {
@@ -111,7 +109,7 @@ public class KettleJavaFile {
     }
 
     public static String setDataSetFile(String javaFileName, String datasetId, String name, String tableName, double sortNumber) {
-        String str1 = "package com.shinow.abc.dataset.bea;\n" +
+        String s = "package com.shinow.abc.dataset.bea;\n" +
                 "\n" +
                 "import com.shinow.abc.amili.dataset.AbstractDataSet;\n" +
                 "import com.shinow.abc.amili.dataset.DataSetInfo;\n" +
@@ -152,7 +150,7 @@ public class KettleJavaFile {
                 "        return result;\n" +
                 "    }\n" +
                 "}\n";
-        return str1;
+        return s;
     }
 
     public static String setDataSetFullFile(String javaFileName, String name) {

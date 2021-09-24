@@ -3,8 +3,7 @@ package com.yjy.action;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import java.io.*;
-import java.util.HashSet;
+import java.io.File;
 
 /**
  * @Author: Jiyuan Yao
@@ -12,7 +11,6 @@ import java.util.HashSet;
  * @Description:
  */
 public class UpLoad {
-    public static String path = "./";
 
     public static String eventOnImport(JButton developer) {
         String filePath = null;
@@ -37,46 +35,9 @@ public class UpLoad {
             filePath = arrfiles.getPath();
             String[] split = filePath.split("\\.");
             if (!"xls".equals(split[1]) && !"xlsx".equals(split[1])) {
-                JOptionPane.showMessageDialog(null, "上传失败！请检查文件格式！", "提示",
+                JOptionPane.showMessageDialog(null, "解析失败！请检查文件格式！", "提示",
                         JOptionPane.INFORMATION_MESSAGE);
                 return null;
-            }
-
-            FileInputStream input = null;
-            FileOutputStream out = null;
-            try {
-                File dir = new File(path);
-                /** 目标文件夹 * */
-                File[] fs = dir.listFiles();
-                HashSet<String> set = new HashSet<String>();
-                for (File file : fs) {
-                    set.add(file.getName());
-                }
-
-                /** 判断是否已有该文件* */
-                if (set.contains(arrfiles.getName())) {
-                    File file = new File(arrfiles.getName());
-                    file.delete();
-                }
-                input = new FileInputStream(arrfiles);
-                byte[] buffer = new byte[1024];
-                File des = new File(path, arrfiles.getName());
-
-                out = new FileOutputStream(des);
-                int len = 0;
-                while (-1 != (len = input.read(buffer))) {
-                    out.write(buffer, 0, len);
-                }
-                out.close();
-                input.close();
-            } catch (FileNotFoundException e1) {
-                JOptionPane.showMessageDialog(null, "上传失败！", "提示",
-                        JOptionPane.ERROR_MESSAGE);
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                JOptionPane.showMessageDialog(null, "上传失败！", "提示",
-                        JOptionPane.ERROR_MESSAGE);
-                e1.printStackTrace();
             }
         }
         return filePath;
