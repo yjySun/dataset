@@ -20,7 +20,8 @@ public class MyFrame extends JFrame {
 
     JPanel choosePanel = new JPanel();
     JPanel checkBoxPanel = new JPanel();
-    JScrollPane contentPanel = new JScrollPane();
+    JPanel contentPanel = new JPanel(new GridLayout(1,1));
+    JScrollPane myScrollPanel = new JScrollPane(contentPanel);
     public static JLabel analyseLabel = new JLabel();
 
     JLabel jLabel = new JLabel("源文件");
@@ -73,15 +74,16 @@ public class MyFrame extends JFrame {
 
         checkBoxPanel.add(generateButton);
 
-        contentPanel.setBorder(BorderFactory.createLineBorder(Color.lightGray));
-        contentPanel.setBackground(Color.white);
-        contentPanel.setPreferredSize(new Dimension(0, 400));
+        myScrollPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        myScrollPanel.setBackground(Color.white);
+        myScrollPanel.setPreferredSize(new Dimension(0, 400));
 
+        contentPanel.setBackground(Color.WHITE);
         contentPanel.add(analyseLabel);
 
         container.add(choosePanel, BorderLayout.NORTH);
         container.add(checkBoxPanel, BorderLayout.CENTER);
-        container.add(contentPanel, BorderLayout.SOUTH);
+        container.add(myScrollPanel, BorderLayout.SOUTH);
 
         developer.addMouseListener(new MouseAdapter() { // 添加鼠标点击事件
             public void mouseClicked(MouseEvent event) {
@@ -96,6 +98,7 @@ public class MyFrame extends JFrame {
                 String version = versionText.getText();
                 String sortNum = sortNumText.getText();
                 if (filePath != null) {
+                    analyseLabel.setText("");
                     if (planetCheckbox.isSelected()) {
                         try {
                             KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex));
