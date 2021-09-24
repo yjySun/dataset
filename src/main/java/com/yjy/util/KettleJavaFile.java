@@ -64,10 +64,12 @@ public class KettleJavaFile {
                         }
                     }
                 }
+                String packageEnd = datasetId.split("_")[0];
+
                 String javaFileName = setJavaFileName(datasetId, startIndex);
-                String datasetContent = setDataSetFile(javaFileName, datasetId, name, tableName, sortNumber);
-                String datasetFullContent = setDataSetFullFile(javaFileName, name);
-                String datasetIncrContent = setDataSetIncrFile(javaFileName, name);
+                String datasetContent = setDataSetFile(javaFileName, datasetId, name, tableName, sortNumber, packageEnd);
+                String datasetFullContent = setDataSetFullFile(javaFileName, name, packageEnd);
+                String datasetIncrContent = setDataSetIncrFile(javaFileName, name, packageEnd);
 
                 File file = new File(deskTopPath);
                 if (!file.exists()) {
@@ -108,8 +110,8 @@ public class KettleJavaFile {
         return javaFileName.toString();
     }
 
-    public static String setDataSetFile(String javaFileName, String datasetId, String name, String tableName, double sortNumber) {
-        String s = "package com.shinow.abc.dataset.bea;\n" +
+    public static String setDataSetFile(String javaFileName, String datasetId, String name, String tableName, double sortNumber, String packageEnd) {
+        String s = "package com.shinow.abc.dataset." + packageEnd + "\";\n" +
                 "\n" +
                 "import com.shinow.abc.amili.dataset.AbstractDataSet;\n" +
                 "import com.shinow.abc.amili.dataset.DataSetInfo;\n" +
@@ -153,8 +155,8 @@ public class KettleJavaFile {
         return s;
     }
 
-    public static String setDataSetFullFile(String javaFileName, String name) {
-        String s = "package com.shinow.abc.dataset.bea;\n" +
+    public static String setDataSetFullFile(String javaFileName, String name, String packageEnd) {
+        String s = "package com.shinow.abc.dataset." + packageEnd + ";\n" +
                 "\n" +
                 "import com.shinow.abc.amili.dataset.DataSet;\n" +
                 "import com.shinow.abc.amili.dataset.DataSetJobTask;\n" +
@@ -186,8 +188,8 @@ public class KettleJavaFile {
         return s;
     }
 
-    public static String setDataSetIncrFile(String javaFileName, String name) {
-        String s = "package com.shinow.abc.dataset.bea;\n" +
+    public static String setDataSetIncrFile(String javaFileName, String name, String packageEnd) {
+        String s = "package com.shinow.abc.dataset." + packageEnd + ";\n" +
                 "\n" +
                 "import com.shinow.abc.amili.dataset.DataSet;\n" +
                 "import com.shinow.abc.amili.dataset.DataSetJobTask;\n" +

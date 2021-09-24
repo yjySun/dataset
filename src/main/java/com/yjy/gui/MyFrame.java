@@ -21,7 +21,7 @@ public class MyFrame extends JFrame {
     JPanel choosePanel = new JPanel();
     JPanel checkBoxPanel = new JPanel();
     JPanel contentPanel = new JPanel();
-    JLabel contentLabel = new JLabel();
+    JLabel analyseLabel = new JLabel();
 
     JLabel jLabel = new JLabel("源文件");
     JTextField jTextField = new JTextField();
@@ -77,7 +77,7 @@ public class MyFrame extends JFrame {
         contentPanel.setBackground(Color.white);
         contentPanel.setPreferredSize(new Dimension(0, 400));
 
-        contentPanel.add(contentLabel);
+        contentPanel.add(analyseLabel);
 
         container.add(choosePanel, BorderLayout.NORTH);
         container.add(checkBoxPanel, BorderLayout.CENTER);
@@ -100,18 +100,23 @@ public class MyFrame extends JFrame {
                         try {
                             KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex));
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "生成前置机所需Java文件失败！请检查！", "提示",
+                            JOptionPane.showMessageDialog(null, "生成前置机所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
                             e.printStackTrace();
                         }
                     }
                     if (subscriberCheckbox.isSelected()) {
-                        try {
-                            SubscriberJavaFile.generateSubscriberJavaFile(filePath, version);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查！", "提示",
+                        if ("".equals(version) || version == null) {
+                            JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
-                            e.printStackTrace();
+                        } else {
+                            try {
+                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                e.printStackTrace();
+                            }
                         }
                     }
                     if (kettleCheckbox.isSelected()) {

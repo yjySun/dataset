@@ -70,8 +70,10 @@ public class SubscriberJavaFile {
                     file.mkdir();
                 }
 
+                String packageEnd = datasetId.split("_")[0];
+
                 String javaFileName = setJavaFileName(datasetId);
-                String datasetContent = setDataSetSubscriberFile(javaFileName, datasetId, name, tableName, version);
+                String datasetContent = setDataSetSubscriberFile(javaFileName, datasetId, name, tableName, version, packageEnd);
 
                 FileWriter datasetSubscriberFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
                 datasetSubscriberFileWriter.write(datasetContent);
@@ -98,8 +100,8 @@ public class SubscriberJavaFile {
         return javaFileName.toString();
     }
 
-    public static String setDataSetSubscriberFile(String javaFileName, String datasetId, String name, String tableName, String version) {
-        String str = "package com.shinow.abc.subscriber.dnm;\n" +
+    public static String setDataSetSubscriberFile(String javaFileName, String datasetId, String name, String tableName, String version, String packageEnd) {
+        String s = "package com.shinow.abc.subscriber." + packageEnd + ";\n" +
                 "\n" +
                 "import com.shinow.abc.amili.subscribe.AbstractSubscriber;\n" +
                 "\n" +
@@ -114,7 +116,7 @@ public class SubscriberJavaFile {
                 "    }\n" +
                 "\n" +
                 "    public String getVersion() {\n" +
-                "        return \""+ version +"\";\n" +
+                "        return \"" + version + "\";\n" +
                 "    }\n" +
                 "\n" +
                 "    public String getDescription() {\n" +
@@ -125,7 +127,7 @@ public class SubscriberJavaFile {
                 "        return \"" + tableName + "\";\n" +
                 "    }\n" +
                 "}\n";
-        return str;
+        return s;
     }
 
 }
