@@ -20,8 +20,8 @@ public class MyFrame extends JFrame {
 
     JPanel choosePanel = new JPanel();
     JPanel checkBoxPanel = new JPanel();
-    JPanel contentPanel = new JPanel();
-    JLabel analyseLabel = new JLabel();
+    JScrollPane contentPanel = new JScrollPane();
+    public static JLabel analyseLabel = new JLabel();
 
     JLabel jLabel = new JLabel("源文件");
     JTextField jTextField = new JTextField();

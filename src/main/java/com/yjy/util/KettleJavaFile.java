@@ -1,5 +1,6 @@
 package com.yjy.util;
 
+import com.yjy.gui.MyFrame;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -7,6 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +49,7 @@ public class KettleJavaFile {
         String name = null;
         String tableName = null;
         String datasetId = null;
+        JLabel analyseLabel = MyFrame.analyseLabel;
         for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
             Row row = sheet.getRow(rIndex);
             if (row != null) {
@@ -87,6 +90,14 @@ public class KettleJavaFile {
                 FileWriter datasetIncrFileWriter = new FileWriter(deskTopPath + javaFileName + "IncrTask.java");
                 datasetIncrFileWriter.write(datasetIncrContent);
                 datasetIncrFileWriter.close();
+
+                if (rIndex == firstRowIndex) {
+                    analyseLabel.setText("<html>");
+                }
+                analyseLabel.setText(analyseLabel.getText() + datasetId + "<br>");
+                if (rIndex == lastRowIndex) {
+                    analyseLabel.setText(analyseLabel.getText() + "</html>");
+                }
 
                 sortNumber++;
             }
