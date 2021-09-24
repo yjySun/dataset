@@ -2,6 +2,7 @@ package com.yjy.util;
 
 import com.yjy.gui.MyFrame;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,6 +14,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * @Author: Jiyuan Yao
@@ -21,7 +23,10 @@ import java.io.FileWriter;
  */
 public class KettleJavaFile {
 
-    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex) throws Exception {
+    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex) throws IOException, InvalidFormatException {
+        String[] split1 = filePath.split("\\\\");
+        String fileName = split1[split1.length - 1];//获取文件名
+
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\kettleJavaFile\\";//获取桌面路径
@@ -93,10 +98,12 @@ public class KettleJavaFile {
 
                 if (rIndex == firstRowIndex) {
                     analyseLabel.setText("<html>");
+                    analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
+                    analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
                 }
-                analyseLabel.setText(analyseLabel.getText() + datasetId + "<br>");
+                analyseLabel.setText(analyseLabel.getText() + datasetId + " 解析完成" + "<br>");
                 if (rIndex == lastRowIndex) {
-                    analyseLabel.setText(analyseLabel.getText() + "</html>");
+                    analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "</html>");
                 }
 
                 sortNumber++;

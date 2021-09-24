@@ -1,5 +1,6 @@
 package com.yjy.util;
 
+import com.yjy.gui.MyFrame;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -7,6 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +22,9 @@ import java.io.FileWriter;
 public class SubscriberJavaFile {
 
     public static void generateSubscriberJavaFile(String filePath, String version) throws Exception {
+        String[] split1 = filePath.split("\\\\");
+        String fileName = split1[split1.length - 1];//获取文件名
+
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\subscriberJavaFile\\";//获取桌面路径
@@ -47,6 +52,7 @@ public class SubscriberJavaFile {
         String name = null;
         String tableName = null;
         String datasetId = null;
+        JLabel analyseLabel = MyFrame.analyseLabel;
         for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
             Row row = sheet.getRow(rIndex);
             if (row != null) {
@@ -78,6 +84,16 @@ public class SubscriberJavaFile {
                 FileWriter datasetSubscriberFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
                 datasetSubscriberFileWriter.write(datasetContent);
                 datasetSubscriberFileWriter.close();
+
+                if (rIndex == firstRowIndex) {
+                    analyseLabel.setText("<html>");
+                    analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
+                    analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
+                }
+                analyseLabel.setText(analyseLabel.getText() + datasetId + " 解析完成" + "<br>");
+                if (rIndex == lastRowIndex) {
+                    analyseLabel.setText(analyseLabel.getText() + "------消费者所需Java文件生成完毕------" + "</html>");
+                }
             }
         }
     }
