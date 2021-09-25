@@ -62,11 +62,11 @@ public class SubscriberJavaFile {
                     Cell cell = row.getCell(cIndex);
                     if (cell != null) {
                         if (cIndex == 0) {
-                            name = cell.toString();
-                        } else if (cIndex == 1) {
-                            tableName = cell.toString();
-                        } else if (cIndex == 2) {
                             datasetId = cell.toString();
+                        } else if (cIndex == 1) {
+                            name = cell.toString();
+                        } else if (cIndex == 2) {
+                            tableName = cell.toString();
                         }
                     }
                 }

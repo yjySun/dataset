@@ -20,7 +20,7 @@ public class MyFrame extends JFrame {
 
     JPanel choosePanel = new JPanel();
     JPanel checkBoxPanel = new JPanel();
-    JPanel contentPanel = new JPanel(new GridLayout(1,1));
+    JPanel contentPanel = new JPanel(new GridLayout(1, 1));
     JScrollPane myScrollPanel = new JScrollPane(contentPanel);
     public static JLabel analyseLabel = new JLabel();
 
