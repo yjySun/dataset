@@ -9,5 +9,8 @@
         <module name="mkdir_dataset" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mkdir_dataset" target="6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
