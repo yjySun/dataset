@@ -20,7 +20,7 @@ public class MyFrame extends JFrame {
 
     JPanel choosePanel = new JPanel();
     JPanel checkBoxPanel = new JPanel();
-    JPanel contentPanel = new JPanel(new GridLayout(1,1));
+    JPanel contentPanel = new JPanel(new GridLayout(1, 1));
     JScrollPane myScrollPanel = new JScrollPane(contentPanel);
     public static JLabel analyseLabel = new JLabel();
 
@@ -99,6 +99,7 @@ public class MyFrame extends JFrame {
                 String sortNum = sortNumText.getText();
                 if (filePath != null) {
                     analyseLabel.setText("");
+                    analyseLabel.setText("<html>");
                     if (planetCheckbox.isSelected()) {
                         try {
                             KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex));
@@ -113,8 +114,12 @@ public class MyFrame extends JFrame {
                             JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
+                            if (planetCheckbox.isSelected()) {
+                                analyseLabel.setText(analyseLabel.getText() + "<br>");
+                            }
+
                             try {
-                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version);
+                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex));
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                         JOptionPane.INFORMATION_MESSAGE);
@@ -125,6 +130,7 @@ public class MyFrame extends JFrame {
                     if (kettleCheckbox.isSelected()) {
                         // 待开发
                     }
+                    analyseLabel.setText(analyseLabel.getText() + "</html>");
                 }
             }
         }); // 生成文件功能

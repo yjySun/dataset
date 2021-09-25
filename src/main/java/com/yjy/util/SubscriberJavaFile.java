@@ -21,7 +21,7 @@ import java.io.FileWriter;
  */
 public class SubscriberJavaFile {
 
-    public static void generateSubscriberJavaFile(String filePath, String version) throws Exception {
+    public static void generateSubscriberJavaFile(String filePath, String version, int startIndex) throws Exception {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
@@ -78,7 +78,7 @@ public class SubscriberJavaFile {
 
                 String packageEnd = datasetId.split("_")[0];
 
-                String javaFileName = setJavaFileName(datasetId);
+                String javaFileName = setJavaFileName(datasetId, startIndex);
                 String datasetContent = setDataSetSubscriberFile(javaFileName, datasetId, name, tableName, version, packageEnd);
 
                 FileWriter datasetSubscriberFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
@@ -86,20 +86,18 @@ public class SubscriberJavaFile {
                 datasetSubscriberFileWriter.close();
 
                 if (rIndex == firstRowIndex) {
-                    analyseLabel.setText("<html>");
                     analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
                     analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
                 }
                 analyseLabel.setText(analyseLabel.getText() + datasetId + " 解析完成" + "<br>");
                 if (rIndex == lastRowIndex) {
-                    analyseLabel.setText(analyseLabel.getText() + "------消费者所需Java文件生成完毕------" + "</html>");
+                    analyseLabel.setText(analyseLabel.getText() + "------消费者所需Java文件生成完毕------");
                 }
             }
         }
     }
 
-    public static String setJavaFileName(String datasetId) {
-        int startIndex = 4;
+    public static String setJavaFileName(String datasetId, int startIndex) {
         String[] datasetIdSplit = datasetId.split("");
         StringBuffer javaFileName = new StringBuffer();
         for (int i = startIndex; i < datasetIdSplit.length; i++) {
