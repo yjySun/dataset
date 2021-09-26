@@ -12,8 +12,10 @@ import org.junit.Test;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
+import javax.tools.JavaCompiler;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class MyTest {
 
     @Test
     public void testExcel() throws Exception {
-        String filePath = "C:\\Users\\yjy\\Desktop\\dataset1.xlsx";
+        String filePath = "C:\\Users\\shinow\\Desktop\\dataset1.xlsx";
 
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
@@ -56,9 +58,9 @@ public class MyTest {
         int firstRowIndex = sheet.getFirstRowNum();
         int lastRowIndex = sheet.getLastRowNum();
 
+        String datasetId= null;
         String name = null;
         String tableName = null;
-        String datasetId = null;
         String datasetIdDetail = null;
         JLabel analyseLabel = MyFrame.analyseLabel;
 
@@ -106,7 +108,76 @@ public class MyTest {
         }
 
         for (int i = 0; i < datasets.size(); i++) {
-            System.out.println(i + " " + datasets.get(i).getDatasetId() + " " + datasets.get(i).getName() + " " + datasets.get(i).getTableName() + " " + datasets.get(i).getTableName() + " " + datasets.get(i).getDatasetIdDetail());
+            Dataset dataset = datasets.get(i);
+            StringBuffer stringBufferID = new StringBuffer();
+            StringBuffer stringBufferTableName = new StringBuffer();
+            for (int j = 0; j < dataset.getTableName().size(); j++) {
+                String ID;
+                if (j == 0) {
+                    ID = "ID";
+                } else {
+                    ID = "ID" + j;
+                }
+                //生成多个ID
+                stringBufferID.append("    public static String " + ID + " = \"" + dataset.getDatasetIdDetail().get(j) + "_dataset\";\n");
+
+                //生成多个result
+                stringBufferTableName.append("        result.add(new DataSetTask(\"" + dataset.getTableName().get(j) + "\", getId(), " + "666" + "." + ID + "));\n");
+            }
+            String idList = stringBufferID.toString();
+            String tableNameList = stringBufferTableName.toString();
+            String bea = setDataSetFile("123", idList, "321", tableNameList, 15.0, "bea");
+
+            FileWriter datasetFileWriter = new FileWriter("C:\\Users\\shinow\\Desktop\\beatest\\" + i + ".java");
+            datasetFileWriter.write(bea);
+            datasetFileWriter.close();
+
+
         }
+    }
+
+    public static String setDataSetFile(String javaFileName, String idList, String name, String tableNameList, double sortNumber, String packageEnd) {
+        String s = "package com.shinow.abc.dataset." + packageEnd + "\";\n" +
+                "\n" +
+                "import com.shinow.abc.amili.dataset.AbstractDataSet;\n" +
+                "import com.shinow.abc.amili.dataset.DataSetInfo;\n" +
+                "import com.shinow.abc.amili.dataset.DataSetTask;\n" +
+                "import com.shinow.abc.dataset.bea." + javaFileName + ";\n" +
+                "\n" +
+                "import java.util.ArrayList;\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "@DataSetInfo\n" +
+                "public class " + javaFileName + " extends AbstractDataSet {\n" +
+                idList +
+                "\n" +
+                "    @Override\n" +
+                "    public String getId() {\n" +
+                "        return ID;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public String getName() {\n" +
+                "        return \"" + name + "数据集\";\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public String getDescription() {\n" +
+                "        return \"\";\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public double sort() {\n" +
+                "        return " + sortNumber + ";\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public List<DataSetTask> tasks() {\n" +
+                "        List<DataSetTask> result = new ArrayList<>();\n" +
+                tableNameList +
+                "        return result;\n" +
+                "    }\n" +
+                "}\n";
+        return s;
     }
 }

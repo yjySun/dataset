@@ -45,4 +45,14 @@ public class Dataset {
     public void setDatasetIdDetail(List<String> datasetIdDetail) {
         this.datasetIdDetail = datasetIdDetail;
     }
+
+    @Override
+    public String toString() {
+        return "Dataset{" +
+                "DatasetId='" + DatasetId + '\'' +
+                ", name='" + name + '\'' +
+                ", tableName=" + tableName +
+                ", datasetIdDetail=" + datasetIdDetail +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package com.yjy.util;
 
 import com.yjy.gui.MyFrame;
+import com.yjy.pojo.Dataset;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: Jiyuan Yao
@@ -51,10 +54,13 @@ public class KettleJavaFile {
         int firstRowIndex = sheet.getFirstRowNum();
         int lastRowIndex = sheet.getLastRowNum();
 
+        String datasetId = null;
         String name = null;
         String tableName = null;
-        String datasetId = null;
+        String datasetIdDetail = null;
         JLabel analyseLabel = MyFrame.analyseLabel;
+
+        List<Dataset> datasets = new ArrayList<Dataset>();
         for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
             Row row = sheet.getRow(rIndex);
             if (row != null) {
@@ -65,48 +71,88 @@ public class KettleJavaFile {
                     if (cell != null) {
                         if (cIndex == 0) {
                             datasetId = cell.toString();
+                            System.out.println(datasetId);
                         } else if (cIndex == 1) {
                             name = cell.toString();
                         } else if (cIndex == 2) {
                             tableName = cell.toString();
+                        } else if (cIndex == 3) {
+                            datasetIdDetail = cell.toString();
                         }
                     }
                 }
-                String packageEnd = datasetId.split("_")[0];
 
-                String javaFileName = setJavaFileName(datasetId, startIndex);
-                String datasetContent = setDataSetFile(javaFileName, datasetId, name, tableName, sortNumber, packageEnd);
-                String datasetFullContent = setDataSetFullFile(javaFileName, name, packageEnd);
-                String datasetIncrContent = setDataSetIncrFile(javaFileName, name, packageEnd);
+                if ("".equals(datasetId) && "".equals(name)) {
+                    datasets.get(datasets.size() - 1).getTableName().add(tableName);
+                    datasets.get(datasets.size() - 1).getDatasetIdDetail().add(datasetIdDetail);
+                } else {
+                    Dataset dataset = new Dataset();
+                    dataset.setDatasetId(datasetId);
+                    dataset.setName(name);
+                    dataset.getTableName().add(tableName);
+                    dataset.getDatasetIdDetail().add(datasetIdDetail);
 
-                File file = new File(deskTopPath);
-                if (!file.exists()) {
-                    file.mkdir();
+                    datasets.add(dataset);
                 }
-
-                FileWriter datasetFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
-                datasetFileWriter.write(datasetContent);
-                datasetFileWriter.close();
-
-                FileWriter datasetFullFileWriter = new FileWriter(deskTopPath + javaFileName + "FullTask.java");
-                datasetFullFileWriter.write(datasetFullContent);
-                datasetFullFileWriter.close();
-
-                FileWriter datasetIncrFileWriter = new FileWriter(deskTopPath + javaFileName + "IncrTask.java");
-                datasetIncrFileWriter.write(datasetIncrContent);
-                datasetIncrFileWriter.close();
-
-                if (rIndex == firstRowIndex) {
-                    analyseLabel.setText("<html>");
-                    analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
-                    analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
-                }
-                analyseLabel.setText(analyseLabel.getText() + datasetId + " 解析完成" + "<br>");
-                if (rIndex == lastRowIndex) {
-                    analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "</html>");
-                }
-
                 sortNumber++;
+            }
+        }
+
+        for (int i = 0; i < datasets.size(); i++) {
+            File file = new File(deskTopPath);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+
+
+            Dataset dataset = datasets.get(i);
+            StringBuffer stringBufferID = new StringBuffer();
+            StringBuffer stringBufferTableName = new StringBuffer();
+
+            String javaFileName = setJavaFileName(dataset.getDatasetId(), startIndex);
+            for (int j = 0; j < dataset.getTableName().size(); j++) {
+                String ID;
+                if (j == 0) {
+                    ID = "ID";
+                } else {
+                    ID = "ID" + j;
+                }
+                //生成多个ID
+                stringBufferID.append("    public static String " + ID + " = \"" + dataset.getDatasetIdDetail().get(j) + "_dataset\";\n");
+
+                //生成多个result
+                stringBufferTableName.append("        result.add(new DataSetTask(\"" + dataset.getTableName().get(j) + "\", getId(), " + javaFileName + "." + ID + "));\n");
+
+            }
+            String idList = stringBufferID.toString();
+            String tableNameList = stringBufferTableName.toString();
+
+            String packageEnd = dataset.getDatasetId().split("_")[0];
+
+            String datasetContent = setDataSetFile(javaFileName, idList, dataset.getName(), tableNameList, sortNumber, packageEnd);
+            String datasetFullContent = setDataSetFullFile(javaFileName, dataset.getName(), packageEnd);
+            String datasetIncrContent = setDataSetIncrFile(javaFileName, dataset.getName(), packageEnd);
+
+            FileWriter datasetFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
+            datasetFileWriter.write(datasetContent);
+            datasetFileWriter.close();
+
+            FileWriter datasetFullFileWriter = new FileWriter(deskTopPath + javaFileName + "FullTask.java");
+            datasetFullFileWriter.write(datasetFullContent);
+            datasetFullFileWriter.close();
+
+            FileWriter datasetIncrFileWriter = new FileWriter(deskTopPath + javaFileName + "IncrTask.java");
+            datasetIncrFileWriter.write(datasetIncrContent);
+            datasetIncrFileWriter.close();
+
+            if (i == 0) {
+                analyseLabel.setText("<html>");
+                analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
+                analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
+            }
+            analyseLabel.setText(analyseLabel.getText() + dataset.getDatasetId() + " 解析完成" + "<br>");
+            if (i == datasets.size() - 1) {
+                analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "</html>");
             }
         }
     }
@@ -128,7 +174,7 @@ public class KettleJavaFile {
         return javaFileName.toString();
     }
 
-    public static String setDataSetFile(String javaFileName, String datasetId, String name, String tableName, double sortNumber, String packageEnd) {
+    public static String setDataSetFile(String javaFileName, String idList, String name, String tableNameList, double sortNumber, String packageEnd) {
         String s = "package com.shinow.abc.dataset." + packageEnd + "\";\n" +
                 "\n" +
                 "import com.shinow.abc.amili.dataset.AbstractDataSet;\n" +
@@ -141,7 +187,7 @@ public class KettleJavaFile {
                 "\n" +
                 "@DataSetInfo\n" +
                 "public class " + javaFileName + " extends AbstractDataSet {\n" +
-                "    public static String ID = \"" + datasetId + "_dataset\";\n" +
+                idList +
                 "\n" +
                 "    @Override\n" +
                 "    public String getId() {\n" +
@@ -166,7 +212,7 @@ public class KettleJavaFile {
                 "    @Override\n" +
                 "    public List<DataSetTask> tasks() {\n" +
                 "        List<DataSetTask> result = new ArrayList<>();\n" +
-                "        result.add(new DataSetTask(\"" + tableName + "\", getId()," + javaFileName + ".ID));\n" +
+                tableNameList +
                 "        return result;\n" +
                 "    }\n" +
                 "}\n";
