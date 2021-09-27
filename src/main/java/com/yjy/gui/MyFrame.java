@@ -1,8 +1,8 @@
 package com.yjy.gui;
 
+import com.yjy.action.KettleJavaFile;
+import com.yjy.action.SubscriberJavaFile;
 import com.yjy.action.UpLoad;
-import com.yjy.util.KettleJavaFile;
-import com.yjy.util.SubscriberJavaFile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -114,7 +114,7 @@ public class MyFrame extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             try {
-                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version);
+                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex));
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                         JOptionPane.INFORMATION_MESSAGE);
