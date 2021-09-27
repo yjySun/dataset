@@ -28,16 +28,17 @@ public class KettleJavaFile {
         String deskTopPath = com.getPath() + "\\kettleJavaFile\\";//获取桌面路径
 
         List<Dataset> datasets = ReadExcel.readExcel(filePath);
+
         if (datasets == null) {
             return;
         } else {
+            File file = new File(deskTopPath);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+
             JLabel analyseLabel = MyFrame.analyseLabel;
             for (int i = 0; i < datasets.size(); i++) {
-                File file = new File(deskTopPath);
-                if (!file.exists()) {
-                    file.mkdir();
-                }
-
                 Dataset dataset = datasets.get(i);
                 StringBuffer stringBufferID = new StringBuffer();
                 StringBuffer stringBufferTableName = new StringBuffer();
