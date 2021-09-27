@@ -69,14 +69,13 @@ public class KettleJavaFile {
                 for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {   //遍历列
                     Cell cell = row.getCell(cIndex);
                     if (cell != null) {
-                        if (cIndex == 0) {
+                        if (cIndex == firstCellIndex) {
                             datasetId = cell.toString();
-                            System.out.println(datasetId);
-                        } else if (cIndex == 1) {
+                        } else if (cIndex == firstCellIndex + 1) {
                             name = cell.toString();
-                        } else if (cIndex == 2) {
+                        } else if (cIndex == firstCellIndex + 2) {
                             tableName = cell.toString();
-                        } else if (cIndex == 3) {
+                        } else if (cIndex == firstCellIndex + 3) {
                             datasetIdDetail = cell.toString();
                         }
                     }
@@ -94,7 +93,6 @@ public class KettleJavaFile {
 
                     datasets.add(dataset);
                 }
-                sortNumber++;
             }
         }
 
@@ -154,6 +152,8 @@ public class KettleJavaFile {
             if (i == datasets.size() - 1) {
                 analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "</html>");
             }
+
+            sortNumber++;
         }
     }
 

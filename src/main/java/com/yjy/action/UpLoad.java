@@ -26,8 +26,8 @@ public class UpLoad {
         /** 过滤文件类型 * */
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Microsoft Excel文件(*.xlsx)", "xlsx");
         FileNameExtensionFilter filter1 = new FileNameExtensionFilter("Microsoft Excel 97-2003 文件(*.xls)", "xls");
-        chooser.setFileFilter(filter);
         chooser.setFileFilter(filter1);
+        chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(developer);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             /** 得到选择的文件* */
