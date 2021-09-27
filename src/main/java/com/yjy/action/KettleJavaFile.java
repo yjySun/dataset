@@ -80,13 +80,12 @@ public class KettleJavaFile {
                 datasetIncrFileWriter.close();
 
                 if (i == 0) {
-                    analyseLabel.setText("<html>");
                     analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
                     analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
                 }
                 analyseLabel.setText(analyseLabel.getText() + dataset.getDatasetId() + " 解析完成" + "<br>");
                 if (i == datasets.size() - 1) {
-                    analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "</html>");
+                    analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "<br>");
                 }
 
                 sortNumber++;

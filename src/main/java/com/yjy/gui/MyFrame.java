@@ -99,6 +99,7 @@ public class MyFrame extends JFrame {
                 String sortNum = sortNumText.getText();
                 if (filePath != null) {
                     analyseLabel.setText("");
+                    analyseLabel.setText("<html>");
                     if (planetCheckbox.isSelected()) {
                         try {
                             KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex));
@@ -125,6 +126,7 @@ public class MyFrame extends JFrame {
                     if (kettleCheckbox.isSelected()) {
                         // 待开发
                     }
+                    analyseLabel.setText(analyseLabel.getText() + "</html>");
                 }
             }
         }); // 生成文件功能
