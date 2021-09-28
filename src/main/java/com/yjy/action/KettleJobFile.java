@@ -64,9 +64,25 @@ public class KettleJobFile {
                 String truncateSql = "TRUNCATE TABLE " + tableName + ";";
                 String kettleFullKjbContent = KettleJobTemplate.setKettleFullKjbFile(datasetId, truncateSql);
 
-                FileWriter datasetSubscriberFileWriter = new FileWriter(kettleFullFilePath + datasetId + "_dataset_full.kjb");
-                datasetSubscriberFileWriter.write(kettleFullKjbContent);
-                datasetSubscriberFileWriter.close();
+                FileWriter kettleJobFullKjbFileWriter = new FileWriter(kettleFullFilePath + datasetId + "_dataset_full.kjb");
+                kettleJobFullKjbFileWriter.write(kettleFullKjbContent);
+                kettleJobFullKjbFileWriter.close();
+
+                StringBuffer stringBuffer = new StringBuffer();
+
+                for (int j = 0; j < dataset.getTableColumn().size(); j++) {
+                    String column = dataset.getTableColumn().get(j);
+                    stringBuffer.append("    <field>\n");
+                    stringBuffer.append("        <column_name>" + column + "</column_name>\n");
+                    stringBuffer.append("        <stream_name>" + column + "</stream_name>\n");
+                    stringBuffer.append("    </field>\n");
+                }
+
+                String kettleFullKtrContent = KettleJobTemplate.setKettleFullKtrFile("", tableName, stringBuffer.toString());
+
+                FileWriter kettleJobFullKtrFileWriter = new FileWriter(kettleFullFilePath + "FullRecordsExtract.ktr");
+                kettleJobFullKtrFileWriter.write(kettleFullKtrContent);
+                kettleJobFullKtrFileWriter.close();
 
 //                if (i == 0) {
 //                    analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
