@@ -2,6 +2,7 @@ package com.yjy.action;
 
 import com.yjy.gui.MyFrame;
 import com.yjy.pojo.Dataset;
+import com.yjy.template.KettleJavaTemplate;
 import com.yjy.util.ReadExcel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
@@ -63,9 +64,9 @@ public class KettleJavaFile {
 
                 String packageEnd = dataset.getDatasetId().split("_")[0];
 
-                String datasetContent = setDataSetFile(javaFileName, idList, dataset.getName(), tableNameList, sortNumber, packageEnd);
-                String datasetFullContent = setDataSetFullFile(javaFileName, dataset.getName(), packageEnd);
-                String datasetIncrContent = setDataSetIncrFile(javaFileName, dataset.getName(), packageEnd);
+                String datasetContent = KettleJavaTemplate.setDataSetFile(javaFileName, idList, dataset.getName(), tableNameList, sortNumber, packageEnd);
+                String datasetFullContent = KettleJavaTemplate.setDataSetFullFile(javaFileName, dataset.getName(), packageEnd);
+                String datasetIncrContent = KettleJavaTemplate.setDataSetIncrFile(javaFileName, dataset.getName(), packageEnd);
 
                 FileWriter datasetFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
                 datasetFileWriter.write(datasetContent);
@@ -110,114 +111,4 @@ public class KettleJavaFile {
         return javaFileName.toString();
     }
 
-    public static String setDataSetFile(String javaFileName, String idList, String name, String tableNameList, double sortNumber, String packageEnd) {
-        String s = "package com.shinow.abc.dataset." + packageEnd + "\";\n" +
-                "\n" +
-                "import com.shinow.abc.amili.dataset.AbstractDataSet;\n" +
-                "import com.shinow.abc.amili.dataset.DataSetInfo;\n" +
-                "import com.shinow.abc.amili.dataset.DataSetTask;\n" +
-                "import com.shinow.abc.dataset.bea." + javaFileName + ";\n" +
-                "\n" +
-                "import java.util.ArrayList;\n" +
-                "import java.util.List;\n" +
-                "\n" +
-                "@DataSetInfo\n" +
-                "public class " + javaFileName + " extends AbstractDataSet {\n" +
-                idList +
-                "\n" +
-                "    @Override\n" +
-                "    public String getId() {\n" +
-                "        return ID;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getName() {\n" +
-                "        return \"" + name + "数据集\";\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getDescription() {\n" +
-                "        return \"\";\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public double sort() {\n" +
-                "        return " + sortNumber + ";\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public List<DataSetTask> tasks() {\n" +
-                "        List<DataSetTask> result = new ArrayList<>();\n" +
-                tableNameList +
-                "        return result;\n" +
-                "    }\n" +
-                "}\n";
-        return s;
-    }
-
-    public static String setDataSetFullFile(String javaFileName, String name, String packageEnd) {
-        String s = "package com.shinow.abc.dataset." + packageEnd + ";\n" +
-                "\n" +
-                "import com.shinow.abc.amili.dataset.DataSet;\n" +
-                "import com.shinow.abc.amili.dataset.DataSetJobTask;\n" +
-                "import com.shinow.abc.amili.dataset.DataSetJobTaskInfo;\n" +
-                "import com.shinow.abc.amili.dataset.KettleThenGenerateReliableEventJob;\n" +
-                "\n" +
-                "@DataSetJobTaskInfo\n" +
-                "public class " + javaFileName + "FullTask extends KettleThenGenerateReliableEventJob implements DataSetJobTask {\n" +
-                "    @Override\n" +
-                "    public String groupName() {\n" +
-                "        return " + javaFileName + ".ID;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getId() {\n" +
-                "        return this.groupName() + DataSet.FULL;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getName() {\n" +
-                "        return \"" + name + "全量任务\";\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getDescription() {\n" +
-                "        return \"" + name + "全量任务\";\n" +
-                "    }\n" +
-                "}\n";
-        return s;
-    }
-
-    public static String setDataSetIncrFile(String javaFileName, String name, String packageEnd) {
-        String s = "package com.shinow.abc.dataset." + packageEnd + ";\n" +
-                "\n" +
-                "import com.shinow.abc.amili.dataset.DataSet;\n" +
-                "import com.shinow.abc.amili.dataset.DataSetJobTask;\n" +
-                "import com.shinow.abc.amili.dataset.DataSetJobTaskInfo;\n" +
-                "import com.shinow.abc.amili.dataset.KettleThenGenerateReliableEventJob;\n" +
-                "\n" +
-                "@DataSetJobTaskInfo\n" +
-                "public class " + javaFileName + "IncrTask extends KettleThenGenerateReliableEventJob implements DataSetJobTask {\n" +
-                "    @Override\n" +
-                "    public String groupName() {\n" +
-                "        return " + javaFileName + ".ID;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getId() {\n" +
-                "        return this.groupName() + DataSet.INCR;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getName() {\n" +
-                "        return \"" + name + "增量任务\";\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public String getDescription() {\n" +
-                "        return \"" + name + "增量任务\";\n" +
-                "    }\n" +
-                "}\n";
-        return s;
-    }
 }

@@ -2,6 +2,7 @@ package com.yjy.action;
 
 import com.yjy.gui.MyFrame;
 import com.yjy.pojo.Dataset;
+import com.yjy.template.SubscriberJavaTemplate;
 import com.yjy.util.ReadExcel;
 
 import javax.swing.*;
@@ -47,7 +48,7 @@ public class SubscriberJavaFile {
                     String tableName = dataset.getTableName().get(j);
 
                     String javaFileName = setJavaFileName(datasetId, startIndex);
-                    String datasetContent = setDataSetSubscriberFile(javaFileName, datasetId, name, tableName, version, packageEnd);
+                    String datasetContent = SubscriberJavaTemplate.setDataSetSubscriberFile(javaFileName, datasetId, name, tableName, version, packageEnd);
 
                     FileWriter datasetSubscriberFileWriter = new FileWriter(deskTopPath + javaFileName + ".java");
                     datasetSubscriberFileWriter.write(datasetContent);
@@ -82,36 +83,6 @@ public class SubscriberJavaFile {
         }
         javaFileName.append("Subscriber");
         return javaFileName.toString();
-    }
-
-    public static String setDataSetSubscriberFile(String javaFileName, String datasetId, String name, String tableName, String version, String packageEnd) {
-        String s = "package com.shinow.abc.subscriber." + packageEnd + ";\n" +
-                "\n" +
-                "import com.shinow.abc.amili.subscribe.AbstractSubscriber;\n" +
-                "\n" +
-                "public class " + javaFileName + " extends AbstractSubscriber {\n" +
-                "\n" +
-                "    public String getId() {\n" +
-                "        return \"" + datasetId + "_dataset\";\n" +
-                "    }\n" +
-                "\n" +
-                "    public String getName() {\n" +
-                "        return \"" + name + "订阅者\";\n" +
-                "    }\n" +
-                "\n" +
-                "    public String getVersion() {\n" +
-                "        return \"" + version + "\";\n" +
-                "    }\n" +
-                "\n" +
-                "    public String getDescription() {\n" +
-                "        return \"\";\n" +
-                "    }\n" +
-                "\n" +
-                "    public String getTableName() {\n" +
-                "        return \"" + tableName + "\";\n" +
-                "    }\n" +
-                "}\n";
-        return s;
     }
 
 }
