@@ -13,6 +13,7 @@ public class Dataset {
     private String name;
     private List<String> tableName = new ArrayList<String>();
     private List<String> datasetIdDetail = new ArrayList<String>();
+    private List<String> tableColumn = new ArrayList<String>();
 
     public String getDatasetId() {
         return DatasetId;
@@ -44,6 +45,14 @@ public class Dataset {
 
     public void setDatasetIdDetail(List<String> datasetIdDetail) {
         this.datasetIdDetail = datasetIdDetail;
+    }
+
+    public List<String> getTableColumn() {
+        return tableColumn;
+    }
+
+    public void setTableColumn(List<String> tableColumn) {
+        this.tableColumn = tableColumn;
     }
 
     @Override

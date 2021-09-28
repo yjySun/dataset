@@ -3,17 +3,10 @@ package com.yjy.action;
 import com.yjy.gui.MyFrame;
 import com.yjy.pojo.Dataset;
 import com.yjy.util.ReadExcel;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.List;
 
@@ -24,7 +17,7 @@ import java.util.List;
  */
 public class SubscriberJavaFile {
 
-    public static void generateSubscriberJavaFile(String filePath, String version, int startIndex) throws Exception {
+    public static void generateSubscriberJavaFile(String filePath, String version, int startIndex, boolean isGenerateKettleJob) throws Exception {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
@@ -32,7 +25,7 @@ public class SubscriberJavaFile {
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\subscriberJavaFile\\";//获取桌面路径
 
-        List<Dataset> datasets = ReadExcel.readExcel(filePath);
+        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob);
 
         if (datasets == null) {
             return;

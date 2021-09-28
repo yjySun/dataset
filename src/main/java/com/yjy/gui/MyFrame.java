@@ -36,7 +36,7 @@ public class MyFrame extends JFrame {
     JTextField sortNumText = new JTextField();
     JCheckBox planetCheckbox = new JCheckBox("前置机Java文件", true);
     JCheckBox subscriberCheckbox = new JCheckBox("消费者Java文件");
-    JCheckBox kettleCheckbox = new JCheckBox("kettle文件");
+    public static JCheckBox kettleCheckbox = new JCheckBox("kettle文件");
     JButton generateButton = new JButton("生成");
 
     public MyFrame(String title) {
@@ -97,12 +97,13 @@ public class MyFrame extends JFrame {
                 String startIndex = startText.getText();
                 String version = versionText.getText();
                 String sortNum = sortNumText.getText();
+                boolean isGenerateKettleJob = kettleCheckbox.isSelected();
                 if (filePath != null) {
                     analyseLabel.setText("");
                     analyseLabel.setText("<html>");
                     if (planetCheckbox.isSelected()) {
                         try {
-                            KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex));
+                            KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex), isGenerateKettleJob);
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null, "生成前置机所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -115,7 +116,7 @@ public class MyFrame extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             try {
-                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex));
+                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex), isGenerateKettleJob);
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                         JOptionPane.INFORMATION_MESSAGE);
