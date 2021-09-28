@@ -21,7 +21,7 @@ public class KettleJobFile {
 
     public static void main(String[] args) {
         try {
-            generateKettleJobFile("C:\\Users\\shinow\\Desktop\\dataset4.xlsx", true);
+            generateKettleJobFile("C:\\Users\\yjy\\Desktop\\dataset4.xlsx", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,17 +68,32 @@ public class KettleJobFile {
                 kettleJobFullKjbFileWriter.write(kettleFullKjbContent);
                 kettleJobFullKjbFileWriter.close();
 
-                StringBuffer stringBuffer = new StringBuffer();
+                StringBuffer columnBuffer = new StringBuffer();
+                StringBuffer selectSqlBuffer = new StringBuffer();
 
                 for (int j = 0; j < dataset.getTableColumn().size(); j++) {
                     String column = dataset.getTableColumn().get(j);
-                    stringBuffer.append("    <field>\n");
-                    stringBuffer.append("        <column_name>" + column + "</column_name>\n");
-                    stringBuffer.append("        <stream_name>" + column + "</stream_name>\n");
-                    stringBuffer.append("    </field>\n");
+                    //生成对应字段
+                    columnBuffer.append("    <field>\n");
+                    columnBuffer.append("        <column_name>" + column + "</column_name>\n");
+                    columnBuffer.append("        <stream_name>" + column + "</stream_name>\n");
+                    columnBuffer.append("    </field>\n");
+                    //生成sql语句
+                    if (j == 0) {
+                        selectSqlBuffer.append("SELECT ");
+                    }
+
+                    if (!("RUN_TIME".equals(column) || "PLANET_CODE".equals(column))) {
+                        selectSqlBuffer.append("T." + column + " AS " + column + ",\n");
+                    }
+
+                    if (j == dataset.getTableColumn().size() - 1) {
+                        selectSqlBuffer.append("FROM " + dataset.getTableName().get(i) + " T");
+                    }
+                    selectSqlBuffer = new StringBuffer(selectSqlBuffer.toString().replace(",\n" + "FROM", "\n" + "FROM"));
                 }
 
-                String kettleFullKtrContent = KettleJobTemplate.setKettleFullKtrFile("", tableName, stringBuffer.toString());
+                String kettleFullKtrContent = KettleJobTemplate.setKettleFullKtrFile(selectSqlBuffer.toString(), tableName, columnBuffer.toString());
 
                 FileWriter kettleJobFullKtrFileWriter = new FileWriter(kettleFullFilePath + "FullRecordsExtract.ktr");
                 kettleJobFullKtrFileWriter.write(kettleFullKtrContent);
