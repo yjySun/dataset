@@ -92,7 +92,7 @@ public class ReadExcel {
                     QueryRunner queryRunner;
                     try {
                         queryRunner = new QueryRunner(DBUtil.getDataSource());
-                        columnName = queryRunner.query("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = ? ORDER BY COLUMN_ID", new ColumnListHandler<String>("COLUMN_NAME"), tableName);
+                        columnName = queryRunner.query("SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = ? ORDER BY COLUMN_ID", new ColumnListHandler<String>("COLUMN_NAME"), tableName);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -101,7 +101,7 @@ public class ReadExcel {
                 if ("".equals(datasetId) && "".equals(name)) {
                     datasets.get(datasets.size() - 1).getTableName().add(tableName);
                     datasets.get(datasets.size() - 1).getDatasetIdDetail().add(datasetIdDetail);
-                    datasets.get(datasets.size() - 1).getTableColumn().add(columnName.toString());
+                    datasets.get(datasets.size() - 1).setTableColumn(columnName);
                 } else {
                     Dataset dataset = new Dataset();
                     dataset.setDatasetId(datasetId);
@@ -109,7 +109,7 @@ public class ReadExcel {
                     dataset.getTableName().add(tableName);
                     dataset.getDatasetIdDetail().add(datasetIdDetail);
                     if (isGenerateKettleJob) {
-                        dataset.getTableColumn().add(columnName.toString());
+                        dataset.setTableColumn(columnName);
                     }
 
                     datasets.add(dataset);
@@ -117,11 +117,6 @@ public class ReadExcel {
             }
         }
 
-        for (int i = 0; i < datasets.size(); i++) {
-            for (int j = 0; j < datasets.get(i).getTableColumn().size(); j++) {
-                System.out.println(datasets.get(i).getDatasetId() + " " + datasets.get(i).getTableColumn().get(j));
-            }
-        }
         return datasets;
     }
 }
