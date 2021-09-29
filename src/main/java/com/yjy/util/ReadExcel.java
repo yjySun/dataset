@@ -1,8 +1,6 @@
 package com.yjy.util;
 
 import com.yjy.pojo.Dataset;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,6 +13,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 public class ReadExcel {
     public static List<Dataset> datasets = new ArrayList<Dataset>();
 
-    public static List<Dataset> readExcel(String filePath, boolean isGenerateKettleJob) {
+    public static List<Dataset> readExcel(String filePath, boolean isGenerateKettleJob, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws SQLException {
         File excel = new File(filePath);
         String[] split = excel.getName().split("\\.");  //.是特殊字符，需要转义！！！！！
         Workbook wb = null;
@@ -86,14 +87,19 @@ public class ReadExcel {
                     }
                 }
 
-                List<String> columnName = null;
+                List<String> columnName = new ArrayList<String>();
+
                 if (isGenerateKettleJob) {
-                    //查询表的字段
-                    QueryRunner queryRunner;
+                    Connection connection = DBUtil.getConnection(databaseIp, databaseId, databaseUserName, databasePassword);
+                    PreparedStatement preparedStatement;
                     try {
-                        queryRunner = new QueryRunner(DBUtil.getDataSource());
-                        columnName = queryRunner.query("SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = ? ORDER BY COLUMN_ID", new ColumnListHandler<String>("COLUMN_NAME"), tableName);
-                    } catch (SQLException e) {
+                        preparedStatement = connection.prepareStatement("SELECT COLUMN_NAME FROM USER_TAB_COLUMNS WHERE TABLE_NAME = ? ORDER BY COLUMN_ID");
+                        preparedStatement.setString(1, tableName);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        while (resultSet.next()) {
+                            columnName.add(resultSet.getString(1));
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

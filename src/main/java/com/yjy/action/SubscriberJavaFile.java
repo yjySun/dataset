@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class SubscriberJavaFile {
 
-    public static void generateSubscriberJavaFile(String filePath, String version, int startIndex, boolean isGenerateKettleJob) throws Exception {
+    public static void generateSubscriberJavaFile(String filePath, String version, int startIndex, boolean isGenerateKettleJob, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws Exception {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
@@ -26,7 +26,7 @@ public class SubscriberJavaFile {
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\subscriberJavaFile\\";//获取桌面路径
 
-        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob);
+        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
 
         if (datasets == null) {
             return;

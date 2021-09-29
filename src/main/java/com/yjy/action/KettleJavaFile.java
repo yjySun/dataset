@@ -4,13 +4,11 @@ import com.yjy.gui.MyFrame;
 import com.yjy.pojo.Dataset;
 import com.yjy.template.KettleJavaTemplate;
 import com.yjy.util.ReadExcel;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class KettleJavaFile {
 
-    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex, boolean isGenerateKettleJob) throws IOException, InvalidFormatException {
+    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex, boolean isGenerateKettleJob, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws Exception {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
@@ -28,7 +26,7 @@ public class KettleJavaFile {
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\kettleJavaFile\\";//获取桌面路径
 
-        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob);
+        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
 
         if (datasets == null) {
             return;

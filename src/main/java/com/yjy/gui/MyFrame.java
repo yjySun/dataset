@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * @Author: Jiyuan Yao
@@ -216,13 +217,18 @@ public class MyFrame extends JFrame {
                 String startIndex = startText.getText();
                 String version = versionText.getText();
                 String sortNum = sortNumText.getText();
+                String databaseIp = databaseIpText.getText();
+                String databaseId = databaseIdText.getText();
+                String databaseUserName = databaseUserNameText.getText();
+                String databasePassword = databasePasswordText.getText();
+
                 boolean isGenerateKettleJob = kettleFullCheckbox.isSelected();
                 if (filePath != null) {
                     analyseLabel.setText("");
                     analyseLabel.setText("<html>");
                     if (planetCheckbox.isSelected()) {
                         try {
-                            KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex), isGenerateKettleJob);
+                            KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex), isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null, "生成前置机所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -230,12 +236,12 @@ public class MyFrame extends JFrame {
                         }
                     }
                     if (subscriberCheckbox.isSelected()) {
-                        if ("".equals(version) || version == null) {
+                        if ("".equals(version)) {
                             JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             try {
-                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex), isGenerateKettleJob);
+                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex), isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                         JOptionPane.INFORMATION_MESSAGE);
@@ -244,10 +250,21 @@ public class MyFrame extends JFrame {
                         }
                     }
                     if (kettleFullCheckbox.isSelected()) {
-                        try {
-                            KettleFullJobFile.generateKettleJobFile(filePath, isGenerateKettleJob);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if ("".equals(databaseIp) || "".equals(databaseId) || "".equals(databaseUserName) || "".equals(databasePassword)) {
+                            JOptionPane.showMessageDialog(null, "生成Kettle全量作业失败！请检查数据！", "提示",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            try {
+                                KettleFullJobFile.generateKettleJobFile(filePath, isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
+                            } catch (SQLException e) {
+                                if ("连接数据库失败！".equals(e.getMessage())){
+                                    JOptionPane.showMessageDialog(null, "数据库连接失败，请检查数据！", "提示",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                }
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     analyseLabel.setText(analyseLabel.getText() + "</html>");
