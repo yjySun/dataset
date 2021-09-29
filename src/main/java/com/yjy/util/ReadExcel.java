@@ -101,7 +101,7 @@ public class ReadExcel {
                 if ("".equals(datasetId) && "".equals(name)) {
                     datasets.get(datasets.size() - 1).getTableName().add(tableName);
                     datasets.get(datasets.size() - 1).getDatasetIdDetail().add(datasetIdDetail);
-                    datasets.get(datasets.size() - 1).setTableColumn(columnName);
+                    datasets.get(datasets.size() - 1).getTableColumn().put(tableName, columnName);
                 } else {
                     Dataset dataset = new Dataset();
                     dataset.setDatasetId(datasetId);
@@ -109,7 +109,7 @@ public class ReadExcel {
                     dataset.getTableName().add(tableName);
                     dataset.getDatasetIdDetail().add(datasetIdDetail);
                     if (isGenerateKettleJob) {
-                        dataset.setTableColumn(columnName);
+                        dataset.getTableColumn().put(tableName, columnName);
                     }
 
                     datasets.add(dataset);

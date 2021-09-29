@@ -1,5 +1,9 @@
 package com.yjy.template;
 
+import com.yjy.pojo.FullKtr;
+
+import java.io.FileWriter;
+
 /**
  * @Author: Jiyuan Yao
  * @Date: 2021/9/28 18:40
@@ -515,7 +519,7 @@ public class KettleJobTemplate {
         return s;
     }
 
-    public static String setKettleFullKtrFile(String selectSql, String tableName, String columnBuffer) {
+    public static String setKettleFullKtrFile(FullKtr fullKtr) {
         String s = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<transformation>\n" +
                 "  <info>\n" +
@@ -1073,89 +1077,12 @@ public class KettleJobTemplate {
                 "    </attributes>\n" +
                 "  </connection>\n" +
                 "  <order>\n" +
-                "    <hop>\n" +
-                "      <from>InputMaster</from>\n" +
-                "      <to>OutputMaster</to>\n" +
-                "      <enabled>Y</enabled>\n" +
-                "    </hop>\n" +
+                fullKtr.getOutputHop() +
+                fullKtr.getBeginHop() +
                 "  </order>\n" +
-                "  <step>\n" +
-                "    <name>InputMaster</name>\n" +
-                "    <type>TableInput</type>\n" +
-                "    <description/>\n" +
-                "    <distribute>Y</distribute>\n" +
-                "    <custom_distribution/>\n" +
-                "    <copies>1</copies>\n" +
-                "    <partitioning>\n" +
-                "      <method>none</method>\n" +
-                "      <schema_name/>\n" +
-                "    </partitioning>\n" +
-                "    <connection>Shinow90</connection>\n" +
-                "    <sql>" + selectSql + "</sql>\n" +
-                "    <limit>0</limit>\n" +
-                "    <lookup/>\n" +
-                "    <execute_each_row>N</execute_each_row>\n" +
-                "    <variables_active>N</variables_active>\n" +
-                "    <lazy_conversion_active>N</lazy_conversion_active>\n" +
-                "    <attributes/>\n" +
-                "    <cluster_schema/>\n" +
-                "    <remotesteps>\n" +
-                "      <input>\n" +
-                "      </input>\n" +
-                "      <output>\n" +
-                "      </output>\n" +
-                "    </remotesteps>\n" +
-                "    <GUI>\n" +
-                "      <xloc>64</xloc>\n" +
-                "      <yloc>48</yloc>\n" +
-                "      <draw>Y</draw>\n" +
-                "    </GUI>\n" +
-                "  </step>\n" +
-                "  <step>\n" +
-                "    <name>OutputMaster</name>\n" +
-                "    <type>TableOutput</type>\n" +
-                "    <description/>\n" +
-                "    <distribute>Y</distribute>\n" +
-                "    <custom_distribution/>\n" +
-                "    <copies>1</copies>\n" +
-                "    <partitioning>\n" +
-                "      <method>none</method>\n" +
-                "      <schema_name/>\n" +
-                "    </partitioning>\n" +
-                "    <connection>Planet</connection>\n" +
-                "    <schema/>\n" +
-                "    <table>" + tableName + "</table>\n" +
-                "    <commit>1000</commit>\n" +
-                "    <truncate>N</truncate>\n" +
-                "    <ignore_errors>N</ignore_errors>\n" +
-                "    <use_batch>Y</use_batch>\n" +
-                "    <specify_fields>Y</specify_fields>\n" +
-                "    <partitioning_enabled>N</partitioning_enabled>\n" +
-                "    <partitioning_field/>\n" +
-                "    <partitioning_daily>N</partitioning_daily>\n" +
-                "    <partitioning_monthly>Y</partitioning_monthly>\n" +
-                "    <tablename_in_field>N</tablename_in_field>\n" +
-                "    <tablename_field/>\n" +
-                "    <tablename_in_table>Y</tablename_in_table>\n" +
-                "    <return_keys>N</return_keys>\n" +
-                "    <return_field/>\n" +
-                "    <fields>\n" +
-                columnBuffer +
-                "    </fields>\n" +
-                "    <attributes/>\n" +
-                "    <cluster_schema/>\n" +
-                "    <remotesteps>\n" +
-                "      <input>\n" +
-                "      </input>\n" +
-                "      <output>\n" +
-                "      </output>\n" +
-                "    </remotesteps>\n" +
-                "    <GUI>\n" +
-                "      <xloc>240</xloc>\n" +
-                "      <yloc>48</yloc>\n" +
-                "      <draw>Y</draw>\n" +
-                "    </GUI>\n" +
-                "  </step>\n" +
+                fullKtr.getBeginNode() +
+                fullKtr.getSelectSql() +
+                fullKtr.getColumn() +
                 "  <step_error_handling>\n" +
                 "  </step_error_handling>\n" +
                 "  <slave-step-copy-partition-distribution>\n" +
@@ -1163,6 +1090,16 @@ public class KettleJobTemplate {
                 "  <slave_transformation>N</slave_transformation>\n" +
                 "  <attributes/>\n" +
                 "</transformation>\n";
+
+
+        FileWriter kettleJobFullKtrFileWriter = null;
+        try {
+            kettleJobFullKtrFileWriter = new FileWriter("C:\\Users\\shinow\\Desktop\\123.txt");
+            kettleJobFullKtrFileWriter.write(s);
+            kettleJobFullKtrFileWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return s;
     }
 }
