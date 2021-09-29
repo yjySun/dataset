@@ -1,5 +1,6 @@
 package com.yjy.gui;
 
+import com.yjy.action.KettleFullJobFile;
 import com.yjy.action.KettleJavaFile;
 import com.yjy.action.SubscriberJavaFile;
 import com.yjy.action.UpLoad;
@@ -8,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 /**
  * @Author: Jiyuan Yao
@@ -36,7 +38,7 @@ public class MyFrame extends JFrame {
     JTextField sortNumText = new JTextField();
     JCheckBox planetCheckbox = new JCheckBox("前置机Java文件", true);
     JCheckBox subscriberCheckbox = new JCheckBox("消费者Java文件");
-    public static JCheckBox kettleCheckbox = new JCheckBox("kettle文件");
+    public static JCheckBox kettleCheckbox = new JCheckBox("kettle全量作业");
     JButton generateButton = new JButton("生成");
 
     public MyFrame(String title) {
@@ -125,7 +127,11 @@ public class MyFrame extends JFrame {
                         }
                     }
                     if (kettleCheckbox.isSelected()) {
-                        // 待开发
+                        try {
+                            KettleFullJobFile.generateKettleJobFile(filePath, isGenerateKettleJob);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     analyseLabel.setText(analyseLabel.getText() + "</html>");
                 }

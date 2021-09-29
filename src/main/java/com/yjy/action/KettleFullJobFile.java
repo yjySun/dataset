@@ -18,15 +18,7 @@ import java.util.List;
  * @Date: 2021/9/28 18:19
  * @Description:
  */
-public class KettleJobFile {
-
-    public static void main(String[] args) {
-        try {
-            generateKettleJobFile("C:\\Users\\shinow\\Desktop\\dataset4.xlsx", true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+public class KettleFullJobFile {
 
     public static void generateKettleJobFile(String filePath, boolean isGenerateKettleJob) throws IOException {
         String[] split1 = filePath.split("\\\\");
@@ -357,14 +349,14 @@ public class KettleJobFile {
                 kettleJobFullKtrFileWriter.write(kettleFullKtrContent);
                 kettleJobFullKtrFileWriter.close();
 
-//                if (i == 0) {
-//                    analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
-//                    analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
-//                }
-//                analyseLabel.setText(analyseLabel.getText() + dataset.getDatasetId() + " 解析完成" + "<br>");
-//                if (i == datasets.size() - 1) {
-//                    analyseLabel.setText(analyseLabel.getText() + "------前置机所需Java文件生成完毕------" + "<br>");
-//                }
+                if (i == 0) {
+                    analyseLabel.setText(analyseLabel.getText() + "------从" + fileName + "中提取数据------" + "<br>");
+                    analyseLabel.setText(analyseLabel.getText() + "准备解析数据...." + "<br>");
+                }
+                analyseLabel.setText(analyseLabel.getText() + dataset.getDatasetId() + " 解析完成" + "<br>");
+                if (i == datasets.size() - 1) {
+                    analyseLabel.setText(analyseLabel.getText() + "------kettle全量作业生成完毕------" + "<br>");
+                }
             }
         }
     }
