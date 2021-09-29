@@ -13,7 +13,7 @@ public class Main {
         MyFrame myFrame = new MyFrame("数据集生成工具");
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        myFrame.setSize(600, 650);
+        myFrame.setSize(600, 750);
 
         myFrame.setVisible(true);
         myFrame.setLocationRelativeTo(null);
