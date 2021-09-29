@@ -254,7 +254,7 @@ public class MyFrame extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             try {
-                                KettleFullJobFile.generateKettleJobFile(filePath, databaseIp, databaseId, databaseUserName, databasePassword);
+                                KettleFullJobFile.generateKettleFullJobFile(filePath, databaseIp, databaseId, databaseUserName, databasePassword);
                             } catch (SQLException e) {
                                 if ("连接数据库失败！".equals(e.getMessage())) {
                                     JOptionPane.showMessageDialog(null, "数据库连接失败，请检查数据！", "提示",

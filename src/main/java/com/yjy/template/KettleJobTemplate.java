@@ -1102,4 +1102,19 @@ public class KettleJobTemplate {
         }
         return s;
     }
+
+    public static String setKettleIncrKjbFile() {
+        String s = "";
+        return s;
+    }
+
+    public static String setMaxUuidIncrKtrFile() {
+        String s = "";
+        return s;
+    }
+
+    public static String setMasterIncrKtrFile() {
+        String s = "";
+        return s;
+    }
 }

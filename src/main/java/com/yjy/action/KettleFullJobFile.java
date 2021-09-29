@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class KettleFullJobFile {
 
-    public static void generateKettleJobFile(String filePath, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws IOException, SQLException {
+    public static void generateKettleFullJobFile(String filePath, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws IOException, SQLException {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
