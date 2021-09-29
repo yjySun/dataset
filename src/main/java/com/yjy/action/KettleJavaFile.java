@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class KettleJavaFile {
 
-    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex, boolean isGenerateKettleJob, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws Exception {
+    public static void generateKettleJavaFile(String filePath, double sortNumber, int startIndex) throws Exception {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
@@ -26,7 +26,7 @@ public class KettleJavaFile {
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\kettleJavaFile\\";//获取桌面路径
 
-        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
+        List<Dataset> datasets = ReadExcel.readExcel(filePath);
 
         if (datasets == null) {
             return;

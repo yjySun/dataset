@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class KettleFullJobFile {
 
-    public static void generateKettleJobFile(String filePath, boolean isGenerateKettleJob, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws IOException, SQLException {
+    public static void generateKettleJobFile(String filePath, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws IOException, SQLException {
         String[] split1 = filePath.split("\\\\");
         String fileName = split1[split1.length - 1];//获取文件名
 
@@ -29,7 +29,7 @@ public class KettleFullJobFile {
         File com = fsv.getHomeDirectory();
         String deskTopPath = com.getPath() + "\\kettleJobFile\\";//获取桌面路径
 
-        List<Dataset> datasets = ReadExcel.readExcel(filePath, isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
+        List<Dataset> datasets = ReadExcel.readExcel(filePath,  databaseIp, databaseId, databaseUserName, databasePassword);
 
         if (datasets == null) {
             return;

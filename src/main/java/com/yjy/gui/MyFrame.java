@@ -222,13 +222,12 @@ public class MyFrame extends JFrame {
                 String databaseUserName = databaseUserNameText.getText();
                 String databasePassword = databasePasswordText.getText();
 
-                boolean isGenerateKettleJob = kettleFullCheckbox.isSelected();
                 if (filePath != null) {
                     analyseLabel.setText("");
                     analyseLabel.setText("<html>");
                     if (planetCheckbox.isSelected()) {
                         try {
-                            KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex), isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
+                            KettleJavaFile.generateKettleJavaFile(filePath, Double.parseDouble(sortNum), Integer.parseInt(startIndex));
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null, "生成前置机所需Java文件失败！请检查数据！", "提示",
                                     JOptionPane.INFORMATION_MESSAGE);
@@ -241,7 +240,7 @@ public class MyFrame extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             try {
-                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex), isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
+                                SubscriberJavaFile.generateSubscriberJavaFile(filePath, version, Integer.parseInt(startIndex));
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "生成消费者所需Java文件失败！请检查数据！", "提示",
                                         JOptionPane.INFORMATION_MESSAGE);
@@ -255,9 +254,9 @@ public class MyFrame extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             try {
-                                KettleFullJobFile.generateKettleJobFile(filePath, isGenerateKettleJob, databaseIp, databaseId, databaseUserName, databasePassword);
+                                KettleFullJobFile.generateKettleJobFile(filePath, databaseIp, databaseId, databaseUserName, databasePassword);
                             } catch (SQLException e) {
-                                if ("连接数据库失败！".equals(e.getMessage())){
+                                if ("连接数据库失败！".equals(e.getMessage())) {
                                     JOptionPane.showMessageDialog(null, "数据库连接失败，请检查数据！", "提示",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 }
