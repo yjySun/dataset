@@ -26,9 +26,10 @@ import java.util.List;
  * @Description:
  */
 public class ReadExcel {
-    public static List<Dataset> datasets = new ArrayList<Dataset>();
 
     public static List<Dataset> readExcel(String filePath) throws SQLException {
+        List<Dataset> datasets = new ArrayList<Dataset>();
+
         File excel = new File(filePath);
         String[] split = excel.getName().split("\\.");  //.是特殊字符，需要转义！！！！！
         Workbook wb = null;
@@ -106,6 +107,8 @@ public class ReadExcel {
     }
 
     public static List<Dataset> readExcel(String filePath, String databaseIp, String databaseId, String databaseUserName, String databasePassword) throws SQLException {
+        List<Dataset> datasets = new ArrayList<Dataset>();
+
         File excel = new File(filePath);
         String[] split = excel.getName().split("\\.");  //.是特殊字符，需要转义！！！！！
         Workbook wb = null;
