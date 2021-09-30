@@ -609,17 +609,6 @@ public class KettleIncrJobFile {
                             }
                             columnBuffer.append("      </value>\n");
                         }
-                        if (k == columnName.size() - 1) {
-                            columnBuffer.append("      <value>\n");
-                            columnBuffer.append("        <name>" + "OPER_TYPE" + "</name>\n");
-                            columnBuffer.append("        <rename>" + "OPER_TYPE" + "</rename>\n");
-                            if ("UUID".equals(columnName.get(k))) {
-                                columnBuffer.append("        <update>" + "N" + "</update>\n");
-                            } else {
-                                columnBuffer.append("        <update>" + "Y" + "</update>\n");
-                            }
-                            columnBuffer.append("      </value>\n");
-                        }
                     }
 
                     //生成GetMaxUuid文件

@@ -130,12 +130,6 @@ public class KettleFullJobFile {
                             columnBuffer.append("        <stream_name>" + columnName.get(k) + "</stream_name>\n");
                             columnBuffer.append("    </field>\n");
                         }
-                        if (k == columnName.size() - 1) {
-                            columnBuffer.append("    <field>\n");
-                            columnBuffer.append("        <column_name>" + "OPER_TYPE" + "</column_name>\n");
-                            columnBuffer.append("        <stream_name>" + "OPER_TYPE" + "</stream_name>\n");
-                            columnBuffer.append("    </field>\n");
-                        }
                     }
                     selectSqlBuffer = new StringBuffer(selectSqlBuffer.toString().replace(",\n" + "FROM", ",\n   '1' AS OPER_TYPE\n" + "\nFROM"));
 
