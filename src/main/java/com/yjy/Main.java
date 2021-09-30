@@ -1,4 +1,6 @@
-package com.yjy.gui;
+package com.yjy;
+
+import com.yjy.gui.MyFrame;
 
 import javax.swing.*;
 

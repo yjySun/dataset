@@ -29,7 +29,7 @@
                     <archive>
                         <manifest>
                             <!-- 此处指定main方法入口的class -->
-                            <mainClass>com.yjy.gui.Main</mainClass>
+                            <mainClass>com.yjy.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
