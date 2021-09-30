@@ -310,8 +310,8 @@ public class KettleIncrJobFile {
                                         "      <parallel>N</parallel>\n" +
                                         "      <draw>Y</draw>\n" +
                                         "      <nr>0</nr>\n" +
-                                        "      <xloc>" + (Integer.parseInt(arraylist.get(2).toString()) + 128) + "</xloc>\n" +
-                                        "      <yloc>" + yposition + "</yloc>\n" +
+                                        "      <xloc>" + arraylist.get(2) + "</xloc>\n" +
+                                        "      <yloc>" + (yposition + 96) + "</yloc>\n" +
                                         "      <attributes_kjc/>\n" +
                                         "    </entry>\n");
                             }
