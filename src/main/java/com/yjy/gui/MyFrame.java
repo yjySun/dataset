@@ -1,9 +1,6 @@
 package com.yjy.gui;
 
-import com.yjy.action.KettleFullJobFile;
-import com.yjy.action.KettleJavaFile;
-import com.yjy.action.SubscriberJavaFile;
-import com.yjy.action.UpLoad;
+import com.yjy.action.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -57,7 +54,7 @@ public class MyFrame extends JFrame {
     JCheckBox planetCheckbox = new JCheckBox("前置机Java文件", true);
     JCheckBox subscriberCheckbox = new JCheckBox("消费者Java文件", true);
     public static JCheckBox kettleFullCheckbox = new JCheckBox("kettle全量作业", true);
-    public static JCheckBox kettleIncrCheckbox = new JCheckBox("kettle增量作业");
+    public static JCheckBox kettleIncrCheckbox = new JCheckBox("kettle增量作业", true);
     JButton generateButton = new JButton("生成");
 
     public MyFrame(String title) {
@@ -150,7 +147,33 @@ public class MyFrame extends JFrame {
                     databaseUserNameText.setVisible(true);
                     databasePasswordLabel.setVisible(true);
                     databasePasswordText.setVisible(true);
-                } else {
+                } else if (!kettleIncrCheckbox.isSelected() && !kettleFullCheckbox.isSelected()) {
+                    databaseIpLabel.setVisible(false);
+                    databaseIpText.setVisible(false);
+                    databaseIdLabel.setVisible(false);
+                    databaseIdText.setVisible(false);
+                    databaseUserNameLabel.setVisible(false);
+                    databaseUserNameText.setVisible(false);
+                    databasePasswordLabel.setVisible(false);
+                    databasePasswordText.setVisible(false);
+                }
+            }
+        });
+
+        //kettle增量作业选项的监听（级联输入框的显示）
+        kettleIncrCheckbox.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (kettleIncrCheckbox.isSelected()) {
+                    databaseIpLabel.setVisible(true);
+                    databaseIpText.setVisible(true);
+                    databaseIdLabel.setVisible(true);
+                    databaseIdText.setVisible(true);
+                    databaseUserNameLabel.setVisible(true);
+                    databaseUserNameText.setVisible(true);
+                    databasePasswordLabel.setVisible(true);
+                    databasePasswordText.setVisible(true);
+                } else if (!kettleIncrCheckbox.isSelected() && !kettleFullCheckbox.isSelected()) {
                     databaseIpLabel.setVisible(false);
                     databaseIpText.setVisible(false);
                     databaseIdLabel.setVisible(false);
@@ -264,6 +287,25 @@ public class MyFrame extends JFrame {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                        }
+                    }
+                    if (kettleIncrCheckbox.isSelected()) {
+                        if ("".equals(databaseIp) || "".equals(databaseId) || "".equals(databaseUserName) || "".equals(databasePassword)) {
+                            JOptionPane.showMessageDialog(null, "生成Kettle增量作业失败！请检查数据！", "提示",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        try {
+                            KettleIncrJobFile.generateKettleIncrJobFile(filePath, databaseIp, databaseId, databaseUserName, databasePassword);
+                        } catch (IOException e) {
+                            JOptionPane.showMessageDialog(null, "生成Kettle增量作业失败！请检查数据！", "提示",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            e.printStackTrace();
+                        } catch (SQLException e) {
+                            if ("连接数据库失败！".equals(e.getMessage())) {
+                                JOptionPane.showMessageDialog(null, "数据库连接失败，请检查数据！", "提示",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            e.printStackTrace();
                         }
                     }
                     analyseLabel.setText(analyseLabel.getText() + "</html>");
